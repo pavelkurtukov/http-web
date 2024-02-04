@@ -19,6 +19,7 @@ public class Request {
         this.path = path.contains("?") ? path.substring(0, path.indexOf("?")) : path;
         this.version = version;
         queryParams = URLEncodedUtils.parse(new URI(path), StandardCharsets.UTF_8);
+        this.queryParams = URLEncodedUtils.parse(new URI(path), StandardCharsets.UTF_8);
     }
 
     public static Request parseRequest(String[] parts) throws URISyntaxException {
@@ -40,4 +41,17 @@ public class Request {
         return version;
     }
 
+    public List<NameValuePair> getQueryParams() {
+        return queryParams;
+    }
+
+    public String getQueryParam(String paramName) {
+        String paramValue = queryParams.stream()
+                            .filter(nameValuePair -> nameValuePair.getName().equals(paramName))
+                            .findFirst()
+                            .map(NameValuePair::getValue)
+                            .orElse(null);
+
+        return paramValue;
+    }
 }
