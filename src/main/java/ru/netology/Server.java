@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URISyntaxException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -29,14 +29,20 @@ public class Server {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             while (true) {
                 Socket clientSocket = serverSocket.accept();
-                threadPool.submit(() -> connect(clientSocket));
+                threadPool.submit(() -> {
+                    try {
+                        connect(clientSocket);
+                    } catch (URISyntaxException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void connect(Socket clientSocket) {
+    public void connect(Socket clientSocket) throws URISyntaxException {
         try (final BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
              final BufferedOutputStream out = new BufferedOutputStream(clientSocket.getOutputStream())) {
 
