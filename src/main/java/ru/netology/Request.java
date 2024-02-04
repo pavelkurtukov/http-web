@@ -18,8 +18,11 @@ public class Request {
         this.method = method;
         this.path = path.contains("?") ? path.substring(0, path.indexOf("?")) : path;
         this.version = version;
-        queryParams = URLEncodedUtils.parse(new URI(path), StandardCharsets.UTF_8);
         this.queryParams = URLEncodedUtils.parse(new URI(path), StandardCharsets.UTF_8);
+        // Демонстрация функционала
+        System.out.println("path = " + this.path);
+        System.out.println("Список параметров: " + this.queryParams.toString());
+        System.out.println("Конкретный параметр (test): " + getQueryParam("test"));
     }
 
     public static Request parseRequest(String[] parts) throws URISyntaxException {
