@@ -3,11 +3,13 @@ package ru.netology;
 import ru.netology.handlers.HandlerForClassic;
 import ru.netology.handlers.StandardHandler;
 
-public class Main {
+import java.net.URISyntaxException;
+
+public class Main  {
   public static final int PORT = 9999;
   public static final int THREADS = 64;
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws URISyntaxException {
     Server server = new Server(THREADS);
 
     // добавление хендлеров (обработчиков)

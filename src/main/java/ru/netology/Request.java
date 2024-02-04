@@ -1,17 +1,27 @@
 package ru.netology;
 
+import org.apache.hc.core5.http.NameValuePair;
+import org.apache.hc.core5.net.URLEncodedUtils;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+
 public class Request {
     private final String method;
     private final String path;
     private final String version;
+    private final List<NameValuePair> queryParams;
 
-    private Request(String method, String path, String version) {
+    private Request(String method, String path, String version) throws URISyntaxException {
         this.method = method;
-        this.path = path;
+        this.path = path.contains("?") ? path.substring(0, path.indexOf("?")) : path;
         this.version = version;
+        queryParams = URLEncodedUtils.parse(new URI(path), StandardCharsets.UTF_8);
     }
 
-    public static Request parseRequest(String[] parts) {
+    public static Request parseRequest(String[] parts) throws URISyntaxException {
         String method = parts[0];
         String path = parts[1];
         String version = parts[2];
@@ -22,7 +32,6 @@ public class Request {
         return method;
     }
 
-
     public String getPath() {
         return path;
     }
@@ -30,4 +39,5 @@ public class Request {
     public String getVersion() {
         return version;
     }
+
 }
